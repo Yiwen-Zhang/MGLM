@@ -1,0 +1,32 @@
+exportPattern("^[[:alpha:]]+")
+
+export(ddirm)
+export(dgdirm)
+export(dmn)
+export(dnegmn)
+export(kr)
+export(MGLMfit)
+export(MGLMreg)
+export(MGLMsparsereg)
+export(MGLMtune)
+export(rdirm)
+export(rgdirm)
+export(rnegmn)
+export(scatter.plot)
+export(corr.plot)
+
+exportMethods(print,predict, plot)
+
+exportClasses(
+    "MGLMfit",
+    "MGLMreg",
+    "MGLMsparsereg",
+	"MGLMtune"
+)
+
+import(methods)
+import(stats)
+import(parallel)
+import(ggplot2)
+import(reshape2)
+import(plyr)
