@@ -331,8 +331,6 @@ Y <- rdirm(size=m, alpha=Alpha)
 
 \subsection{Select by entries}
 
-Figure \ref{fig:lasso-solpath} displays the trace of BIC along the solution path and the regularized estimate at optimal tuning parameter value.
-
 <<warning=FALSE, cache=FALSE>>=
 sweep <- MGLMtune(Y~0+X, dist="DM", penalty="sweep", ngridpt=30)
 print(sweep$select)
@@ -357,7 +355,8 @@ print(sweep$select)
 
 \subsection{Select by rows}
 
-Since the rows of the parameter matrix correspond to predictors, selecting by rows performs variable selection at the predictor level. Figure \ref{fig:group-solpath} displays the trace of BIC along the solution path and the regularized estimate at optimal tuning parameter value.
+Since the rows of the parameter matrix correspond to predictors, selecting by rows performs variable selection at the predictor level. 
+
 <<warning=FALSE, cache=FALSE>>=
 group <- MGLMtune(Y~0+X, dist="DM", penalty="group", ngridpt=30)
 print(group$select)
@@ -382,7 +381,7 @@ print(group$select)
 
 \subsection{Select by singular values}
 
-Nuclear norm regularization encourages low rank in the regularized estimate. Figure \ref{fig:nuclear-solpath} displays the trace of BIC along the solution path and the regularized estimate at optimal tuning parameter value.  
+Nuclear norm regularization encourages low rank in the regularized estimate. 
 
 <<warning=FALSE, cache=FALSE>>=
 nuclear <- MGLMtune(Y~0+X, dist="DM", penalty="nuclear", ngridpt=30, warm.start=FALSE)
