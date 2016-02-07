@@ -131,7 +131,6 @@ m <- rbinom(n, 80, 0.5)
 Y <- rgdirm(m, Alpha, Beta)
 
 select <- MGLMtune(Y~0+X, dist="GDM", penalty="group", ngridpt=30, display=TRUE)
-plot(select)
 }
 }
 \keyword{Sparse regression}

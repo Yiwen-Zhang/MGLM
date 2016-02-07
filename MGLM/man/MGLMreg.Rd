@@ -160,7 +160,6 @@ gdm.Y <- rgdirm(m, Alpha, Beta)
 ## Regression
 \donttest{
 gdm.reg <- MGLMreg(gdm.Y~X, dist="GDM", LRT=FALSE)
-plot(gdm.reg)
 }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

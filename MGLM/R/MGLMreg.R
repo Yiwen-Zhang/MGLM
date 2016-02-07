@@ -873,7 +873,7 @@ DMD.GDM.reg <- function(Y,init,X,weight,epsilon,maxiters, display,
 	niter <- rep(0, (d-1))
 	options(warn=-1)
 	if(!parallel){
-		for(j in 1:(d-1) ){      
+		for(j in 1:(d-1) ){   
 		  YGDM <- cbind(Y[,j], Ys[,(j+1)])
 			reg.result <- eval(call("DMD.DM.reg",
 				Y=YGDM, init=init[,c(j,j+d-1)], X=X, weight=weight, 

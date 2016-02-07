@@ -83,11 +83,12 @@ ddirm <- function(Y, alpha){
 	logl <-  lgamma(m+1) + rowSums(lgamma(Y+alpha)) + lgamma( alpha_rowsums) - 
 	  rowSums(lgamma(Y+1))-rowSums(lgamma(alpha))-lgamma(alpha_rowsums+m)
 	
-#   if(sum(canc)>0){
+  if(sum(canc)>0){
 #     logMN <- rowSums(Y*log(alpha)) - rowSums(Y*log(alpha_rowsums)) + 
 #       lgamma(m+1) - rowSums(lgamma(Y+1))
 #     logl[canc] <- logMN[canc]
-#   }
+    logl[canc] <- -Inf
+  }
   
 	return(logl)	
 }
