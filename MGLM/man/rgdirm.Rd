@@ -8,10 +8,16 @@ Generate random deviates from the generalized Dirichlet multinomial distribution
 Generate random deviates from the generalized Dirichlet multinomial distribution. 
 }
 \usage{
-rgdirm(size, alpha, beta, n)
+rgdirm(n, size, alpha, beta)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
+  \item{n}{
+  number of random vectors to generate.  When \code{size} is a scalar and \code{alpha} is a vector, 
+  must specify \code{n}.  When \code{size} is a vector and \code{alpha} is a matrix, \code{n} is optional.
+  The default value of \code{n} is the length of \code{size}. If given, \code{n} should be equal to 
+  the length of \code{size}. 
+}
   \item{size}{
   a number or vector specifying the total number of objects that are put
   into d categories in the generalized Dirichlet multinomial distribution. 
@@ -30,12 +36,6 @@ rgdirm(size, alpha, beta, n)
   number of rows should match the length of \code{size}.  Each random vector 
   will be drawn from the corresponding row of \code{beta} and the corresponding element of \code{size}. 
   See Details below. 
-}
-  \item{n}{
-  number of random vectors to generate.  When \code{size} is a scalar and \code{alpha} is a vector, 
-  must specify \code{n}.  When \code{size} is a vector and \code{alpha} is a matrix, \code{n} is optional.
-  The default value of \code{n} is the length of \code{size}. If given, \code{n} should be equal to 
-  the length of \code{size}. 
 }
 }
 
@@ -66,7 +66,7 @@ alpha <- matrix(abs(rnorm(40)), 10, 4)
 beta <- matrix(abs(rnorm(40)), 10, 4)
 size <- rbinom(10, 10, 0.5)
 GDM.rdm <- rgdirm(size=size, alpha=alpha, beta=beta)
-GDM.rdm1 <- rgdirm(size=10, alpha=abs(rnorm(4)), beta=abs(rnorm(4)), n=20)
+GDM.rdm1 <- rgdirm(n=20, size=10, alpha=abs(rnorm(4)), beta=abs(rnorm(4)))
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

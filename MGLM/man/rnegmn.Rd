@@ -8,10 +8,16 @@ Generate random deviates from the negative multinomial distribution
 Generate random deviates from the negative multinomial distribution.
 }
 \usage{
-rnegmn(prob, beta, n)
+rnegmn(n, prob, beta)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
+  \item{n}{
+  number of random vectors to generate.  When \code{beta} is a scalar and \code{prob} is a vector, 
+  must specify \code{n}.  When \code{beta} is a vector and \code{prob} is a matrix, \code{n} is optional.
+  The default value of \code{n} is the length of \code{beta}. If given, \code{n} should be equal to 
+  the length of \code{beta}. 
+}
   \item{prob}{
 numerical non-negative vector or matrix.  If \code{prob} is a vector, \code{beta}
 must be a scalar.  All the \code{n} random vectors will be drawn from the
@@ -22,12 +28,6 @@ the corresponding row of \code{prob} and the corresponding element of \code{beta
   \item{beta}{
 number or vector specifying the over despersion in negative multinomial
 distribution. 
-}
-  \item{n}{
-  number of random vectors to generate.  When \code{beta} is a scalar and \code{prob} is a vector, 
-  must specify \code{n}.  When \code{beta} is a vector and \code{prob} is a matrix, \code{n} is optional.
-  The default value of \code{n} is the length of \code{beta}. If given, \code{n} should be equal to 
-  the length of \code{beta}. 
 }
 }
 
@@ -61,7 +61,7 @@ X <- matrix(runif(n*p), n, p )
 alpha <- exp(X\%*\%a)
 prob <- alpha/(rowSums(alpha)+1)
 beta <- exp(X\%*\%matrix(1,p)) 
-Y <- rnegmn(prob, beta, n)
+Y <- rnegmn(n, prob, beta)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.

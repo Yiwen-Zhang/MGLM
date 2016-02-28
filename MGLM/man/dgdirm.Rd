@@ -65,7 +65,7 @@ Yiwen Zhang and Hua Zhou
 m <- 20
 alpha <- c(0.2, 0.5)
 beta <- c(0.7, 0.4)
-Y <- rgdirm(m, alpha, beta, 10)
+Y <- rgdirm(10, m, alpha, beta)
 dgdirm(Y, alpha, beta)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

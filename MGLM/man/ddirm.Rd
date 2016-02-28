@@ -51,7 +51,7 @@ Yiwen Zhang and Hua Zhou
 \examples{
 m <- 20
 alpha <- c(0.1, 0.2)
-dm.Y <- rdirm(m, alpha, n=10)	
+dm.Y <- rdirm(n=10, m, alpha)	
 pdfln <- ddirm(dm.Y, alpha)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

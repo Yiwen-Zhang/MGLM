@@ -33,108 +33,16 @@
 
 The analysis of multivariate count data arises in numerous fields including genomics, image analysis, text mining, and sports analytics.  The multinomial logit model is limiting due to its restrictive mean-variance structure. Moreover, it assumes that counts of different categories are negatively correlated.  Models that allow over-dispersion and possess more flexible positive and/or negative correlation structures offer more realism.  We implement four models in the R package {\tt MGLM}: multinomial logit (MN), Dirichlet multinomial (DM), generalized Dirichlet multinomial (GDM), and negative mutinomial (NegMN). Distribution fitting, regression, hypothesis testing, and variable selection are treated in a unified framework. 
 
-The simulted data we plan to analyze is multivariate count data with $d$ categories.
+The simulated data we plan to analyze is multivariate count data with $d$ categories.
 
-<<eval=TRUE, echo=FALSE, include=FALSE>>=
-require(ggplot2)
-require(reshape2)
-require(plyr)
-@
-<<eval=TRUE, echo=TRUE>>=
-require(MGLM)
-@
-
-Before getting started with model fitting, we explore the correlation structure of the response counts. 
-
-<<cache=TRUE>>=
-data(iris)
-Y <-iris[, 1:4]
-@
-
-<<label=scatter1, echo=FALSE, pdf=FALSE, results=hide, include=TRUE>>=
-scatter.plot <- function(Y, main=NULL, free=TRUE, ...){
-   "ID" <- "variable1"<-"value1" <- "value" <- NULL
-  if(is.matrix(Y)){
-    Y <- as.data.frame(Y)
-    Y$ID <- rownames(Y)
-  }else if(is.data.frame(Y)){
-    Y$ID <- row.names(Y)
-  }else{
-    stop("Please provide a matrix or a data frame.")
-  }
-  meltDf <- melt(Y, id='ID')
-  names(meltDf) <- c("ID", "variable1", "value1")
-  out <- ddply(meltDf, .(variable1), function(df, df2){
-    excl <- unique(df$variable)
-    outDf <- merge(df, df2, by="ID")
-  }, Y)
-  meltDf2 <- melt(out, id=c("ID", "variable1", "value1"))
-  meltDf2$value <- ifelse(meltDf2$variable1==meltDf2$variable, NA, 
-                          meltDf2$value)
-  meltDf2 <- subset(meltDf2, !is.na(value))
-  if(!free){
-  plot <- ggplot(meltDf2, aes(x=value1, y=value)) + 
-    geom_point() + 
-    facet_grid(variable1~variable,as.table=FALSE) +
-    xlab("") + ylab("") + ggtitle(main) + 
-    theme_bw()+
-    theme(axis.text.x=element_text(size=6),
-          axis.text.y=element_text(size=6))
-  }else{
-    plot <- ggplot(meltDf2, aes(x=value1, y=value)) + 
-      geom_point() + 
-      facet_wrap(variable1~variable,as.table=FALSE, scales="free") +
-      xlab("") + ylab("") + ggtitle(main) + 
-      theme_bw()+
-      theme(axis.text.x=element_text(size=6),
-            axis.text.y=element_text(size=6))
-  }
-  
-
-  return(plot)
-}
-
-scatter.plot(Y, free=TRUE)
-@
-
-<<label=corr, echo=FALSE, pdf=FALSE, results=hide, include=TRUE>>=
-corr.plot <- function(Y, main=NULL){
-  "Var1" <- "Var2" <- "value" <- NULL
-  df <- melt(cor(Y))
-  names(df) <- c(c("Var1", "Var2", "value"))
-  plot <- qplot(x=Var1, y=Var2, data=subset(df, Var1!=Var2), 
-    fill=factor(as.character(sign(value)), levels=c("-1", "1")), 
-    alpha=value, geom="tile")+
-    theme_bw()+
-    scale_alpha(guide=FALSE)+
-    scale_fill_discrete("", drop=FALSE) + 
-    ggtitle(main)+
-    xlab("") + ylab("")
-
-  return(plot)
-}
-corr.plot(Y)
-@
-
-\begin{figure}
-\begin{center}
-$$
-\begin{array}{cc}
-\setkeys{Gin}{height=2in,width=2.3in}
-<<label=scatter1,fig=TRUE,echo=FALSE>>=
-<<scatter1>>
-@
-& 
-\setkeys{Gin}{height=2in,width=2.7in}
-<<label=corr,fig=TRUE,echo=FALSE>>=
-<<corr>>
-@
-\end{array}
-$$
-\end{center}
-\caption{Scatter plot and correlation plot of the multivariate counts.}
-\label{fig:scatter}
-\end{figure}
+%' <<eval=TRUE, echo=FALSE, include=FALSE>>=
+%' require(ggplot2)
+%' require(reshape2)
+%' require(plyr)
+%' @
+%' <<eval=TRUE, echo=TRUE>>=
+%' require(MGLM)
+%' @
 
 
 
@@ -149,17 +57,25 @@ When fitting distributions, i.e. no covariates involved, MN is a sub-model of DM
 
 We first generate data from a multinomial distribution. Note the multinomial parameter (must be positive) supplied to the `rmn' function is automatically scaled to be a probability vector.
 <<cache=TRUE>>=
+require(MGLM)
 set.seed(123)
 n <- 200
 d <- 4
 alpha <- rep(1,d)
 m <- 50
-Y <- rmn(m, alpha, n)
+Y <- rmn(n, m, alpha)
 @
-Fitting the DM distribution to the multinomial data shows no advantage.
+Multinomial distribution fitting, although trivial, is implemented. 
+
 <<cache=TRUE>>=
-mnFit <- MGLMfit(Y, dist="DM")
+mnFit <- MGLMfit(Y, dist="MN")
 print(mnFit)
+@
+
+As a comparison, we fit the DM distribution to the same data set.  The results indicate that using a more complex model on the multinomial data shows no advantage.
+<<cache=TRUE>>=
+compareFit <- MGLMfit(Y, dist="DM")
+print(compareFit)
 @
 The DM parameter estimates and their standard errors are both big, indicating possible overfitting by the DM model. This is confirmed by the fact that the p-value of the LRT for comparing MN to DM is close to 1.
 
@@ -172,7 +88,7 @@ n <- 200
 d <- 4
 alpha <- rep(1, d)
 m <- 50
-Y <- rdirm(m, alpha, n)
+Y <- rdirm(n, m, alpha)
 @
 <<cache=TRUE>>=
 dmFit <- MGLMfit(Y, dist="DM")
@@ -200,7 +116,7 @@ d <- 4
 alpha <- rep(1, d-1)
 beta <- rep(1, d-1)
 m <- 50
-Y <- rgdirm(m, alpha, beta, n)
+Y <- rgdirm(n, m, alpha, beta)
 gdmFit <- MGLMfit(Y, dist="GDM")
 print(gdmFit)
 @
@@ -215,7 +131,7 @@ d <- 4
 p <- 5
 prob <- rep(0.2, d)
 beta <- 10
-Y <- rnegmn(prob, beta, n)
+Y <- rnegmn(n, prob, beta)
 negmnFit <- MGLMfit(Y, dist="NegMN")
 print(negmnFit)
 @
@@ -248,7 +164,7 @@ beta <- matrix(c(1.2, 1, 0.6), p, d-1, byrow=TRUE)
 beta[c(1,2),] <- 0
 Beta <- exp(X%*%beta)
 m <- runif(n, min=0, max=25) + 25
-Y <- rgdirm(m, Alpha, Beta)
+Y <- rgdirm(n, m, Alpha, Beta)
 @
 We fit various regression models and test significance of covariates.
 

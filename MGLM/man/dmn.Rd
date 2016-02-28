@@ -56,7 +56,7 @@ Yiwen Zhang and Hua Zhou
 \examples{
 m <- 20
 prob <- c(0.1, 0.2)
-dm.Y <- rdirm(m, prob, n=10)	
+dm.Y <- rdirm(n=10, m, prob)	
 pdfln <- dmn(dm.Y, prob)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the

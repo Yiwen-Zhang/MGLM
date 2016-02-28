@@ -154,7 +154,7 @@ alpha <- matrix(1, p, d-1)
 beta <- matrix(1, p, d-1)
 Alpha <- exp(X\%*\%alpha)
 Beta <- exp(X\%*\%beta)
-gdm.Y <- rgdirm(m, Alpha, Beta)
+gdm.Y <- rgdirm(n, m, Alpha, Beta)
 
 ##----------------------------------------##
 ## Regression

@@ -25,7 +25,7 @@ a data frame or matrix containing the count data.
 	Rows and columns of all zeros are automatically removed.
 }
   \item{dist}{
-a description of the distribution to fit.  See \code{\link{dist}} for details.
+a description of the distribution to fit. Choose from \code{"MN"}, \code{"DM"}, \code{"GDM"}, \code{"NegMN"}.  See \code{\link{dist}} for details.
 }
   \item{weight}{
 an optional vector of weights assigned to each row of the data. 
